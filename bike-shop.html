@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- <link rel="stylesheet" href="bike.css"> -->
+        <title>live</title><meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1"> 
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+        
+        <!--for nav icon-->
+        
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--        
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+
+        
+        <link rel="stylesheet" href="bike-shop.css">
+    </head>
+    <body>
+<div class="container">
+        <header class="header">
+            <h3 class="header-logo">Simple Bike Rental Store</h3>
+            
+            <nav class="header-nav">
+            <ul>
+                <li><a href="#0">Home</a></li>
+                <li><a href="#0">Products</a></li>
+                <li><a href="#0">Contact</a></li>
+            </ul>
+            </nav>
+        </header>
+        
+
+        
+        <div class="products">
+            
+        
+            
+        </div><!-- products -->
+        
+        <div class="shopping-cart">
+            <div class="shopping-cart-head">
+            <span class="product-quantity">0</span> Product(s) in Cart
+            </div>
+            <ul class="shopping-cart-list">
+            </ul>
+            <div class="cart-buttons">
+            <a href="#0" class="button empty-cart-btn">Empty</a>
+            <a href="#0" class="button cart-checkout">Checkout - <span class="total-price">$0</span></a>
+            </div>
+        </div>
+        </div><!-- container -->
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+     
+
+        <script>
+           productsInCart = [];
+  
+  // Pretty much self explanatory function. NOTE: Here I have used template strings (ES6 Feature)
+  var ShoppingCart = (function($) {
+  "use strict";
+  
+  // Cahce necesarry DOM Elements
+  var productsEl = document.querySelector(".products"),
+      cartEl =     document.querySelector(".shopping-cart-list"),
+      productQuantityEl = document.querySelector(".product-quantity"),
+      emptyCartEl = document.querySelector(".empty-cart-btn"),
+      cartCheckoutEl = document.querySelector(".cart-checkout"),
+      totalPriceEl = document.querySelector(".total-price");
+  
+  // Fake JSON data array here should be API call
+  var products = [ 
+      {
+"id":0,
+},
+   {
+"id": 1,
+"name": "Adult Male Bike",
+"price": 20.50,
+"image": "http://via.placeholder.com/250x250?text=Adult%20Male%20Bike",
+"product_type": "bike"
+},
+{
+"id": 2,
+"name": "Adult Female Bike",
+"price": 20.50,
+"image": "http://via.placeholder.com/250x250?text=Adult%20Female%20Bike",
+"product_type": "bike"
+},
+{
+"id": 3,
+"name": "Kids Unisex Bike",
+"price": 12.75,
+"image": "http://via.placeholder.com/250x250?text=Kids%20Unisex%20Bike",
+"product_type": "bike"
+}, {
+"id": 4,
+"name": "Adult Unisex Helmet",
+"price": 4.00,
+"image": "http://via.placeholder.com/250x250?text=Adult%20Unisex%20Helmet",
+"product_type": "accessory"
+},
+{
+"id": 5,
+"name": "Kids Unisex Helmet",
+"price": 3.50,
+"image": "http://via.placeholder.com/250x250?text=Kids%20Unisex%20Helmet",
+"product_type": "accessory"
+},
+{
+"id": 6,
+"name": "Insurance",
+"price": 9.99,
+"image": "http://via.placeholder.com/250x250?text=Insurance",
+"product_type": "addon"
+}
+];
+    
+  
+  // Pretty much self explanatory function. NOTE: Here I have used template strings (ES6 Feature)
+
+ let helmet = products[4].name;
+ let kidHelmet = products[5].name;
+ let helmetPrice = products[4].price;
+ let addon = products[6].price;
+  // new array has only the bikes
+
+//   var bike_arry =  products.filter(function(hero) {
+// 	return hero.price == 20.50;
+// });
+
+var bike_arry =  products.filter(function(hero) {
+	return hero.product_type == 'bike';
+});
+
+  var kids_arry =  products.filter(function(hero) {
+	return hero.price == 12.75;
+});
+
+  var generateProductList = function() {
+      bike_arry.forEach(function(item) {
+  var productEl = document.createElement("div");
+      productEl.className = "product";
+      productEl.innerHTML = `   
+      <div class="product-image">
+    <img src="${item.image}" alt="${item.name}"></div>
+    <div class="product-name"><span>Product:</span> ${item.name}</div>
+    <div class="product-product_type"><span>Product Type:</span> ${item.product_type}</div>
+
+    <div class="product-name"><span>Accessory:</span> ${helmet}</div>
+
+    <div class="product-price"><span>Price:</span> $ ${item.price} + <br> $ 9.99 insurance +  <br> $ 4.00 Helmet</div>
+
+    <div class="product-add-to-cart">
+    <a href="#" class="button add-to-cart" data-id=${item.id}>Add to Cart</a>
+    </div>
+</div>
+
+`;
+
+
+
+productsEl.appendChild(productEl);
+    });
+  }
+
+  // Like one before and I have also used ES6 template strings
+  var generateCartList = function() {
+    
+    cartEl.innerHTML = "";
+
+    productsInCart.forEach(function(item) {
+      var li = document.createElement("li");
+      li.innerHTML = `${item.quantity} ${item.product.name} - $${item.product.price  * item.quantity + addon + helmetPrice }`;
+      cartEl.appendChild(li);
+    });
+    
+    productQuantityEl.innerHTML = productsInCart.length;
+    
+    generateCartButtons()
+  }
+  
+  
+  // Function that generates Empty Cart and Checkout buttons based on condition that checks if productsInCart array is empty
+  var generateCartButtons = function() {
+    if(productsInCart.length > 0) {
+      emptyCartEl.style.display = "block";
+      cartCheckoutEl.style.display = "block"
+      totalPriceEl.innerHTML = "$ " + calculateTotalPrice();
+    } else {
+      emptyCartEl.style.display = "none";
+      cartCheckoutEl.style.display = "none";
+      
+    }
+  }
+  
+  // Setting up listeners for click event on all products and Empty Cart button as well
+  var setupListeners = function() {
+    productsEl.addEventListener("click", function(event) {
+      var el = event.target;
+      if(el.classList.contains("add-to-cart")) {
+       var elId = el.dataset.id;
+       addToCart(elId);
+      }
+    });
+    
+    emptyCartEl.addEventListener("click", function(event) {
+      if(confirm("Are you sure?")) {
+        productsInCart = [];
+      }
+      generateCartList();
+    });
+  }
+  
+  // Adds new items or updates existing one in productsInCart array
+  var addToCart = function(id) {
+    var obj = products[id];
+    if(productsInCart.length === 0 || productFound(obj.id) === undefined) {
+      productsInCart.push({product: obj, quantity: 1});
+    } else {
+      productsInCart.forEach(function(item) {
+        if(item.product.id === obj.id) {
+          item.quantity++;
+        }
+      });
+    }
+    generateCartList();
+  }
+  
+  
+  // This function checks if project is already in productsInCart array
+  var productFound = function(productId) {
+    return productsInCart.find(function(item) {
+      return item.product.id === productId;
+    });
+  }
+
+  var calculateTotalPrice = function() {
+    return productsInCart.reduce(function(total, item) {
+      return total  +(item.product.price *  item.quantity );
+    }, 0);
+  }
+  
+  // This functon starts the whole application
+  var init = function() {
+    generateProductList();
+    setupListeners();
+  }
+  
+  // Exposes just init function to public, everything else is private
+  return {
+    init: init
+  };
+  
+  // I have included jQuery although I haven't used it
+})(jQuery);
+
+ShoppingCart.init(); 
+        
+        </script>
+
+    </body>
+</html>
